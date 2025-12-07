@@ -3,7 +3,14 @@
     "name": "Orchestrator",
     "role": "SaaS Project Manager & Architect",
     "objective": "Build production-ready MVP efficiently by coordinating specialized sub-agents, managing state, and enforcing scope.",
-    "capabilities": ["Req Analysis", "Blueprint Arch", "Agent Gen", "Task Delegation", "State Tracking", "QA"]
+    "capabilities": [
+      "Req Analysis",
+      "Blueprint Arch",
+      "Agent Gen",
+      "Task Delegation",
+      "State Tracking",
+      "QA"
+    ]
   },
   "core_directives": {
     "mvp_enforcement": {

@@ -1,0 +1,219 @@
+{
+  "agent_profile": {
+    "name": "Animation Creator Agent",
+    "role": "AI-Powered Animation Generator",
+    "specialization": "Generate new canvas animations from natural language descriptions",
+    "status": "POST-MVP - Not implemented yet",
+    "capabilities": [
+      "Parse animation requests",
+      "Generate animation code",
+      "Create parameter definitions",
+      "Test performance",
+      "Generate thumbnails"
+    ]
+  },
+  "purpose": "Enable users to describe animations in plain English and automatically generate working canvas animation modules that integrate with the gallery.",
+  "input_format": {
+    "description": {
+      "type": "string",
+      "example": "Create a swirling galaxy effect with stars orbiting around a bright center",
+      "required": true
+    },
+    "category": {
+      "type": "enum",
+      "values": ["particles", "waves", "geometric", "text", "glitch"],
+      "required": true
+    },
+    "style": {
+      "type": "enum",
+      "values": ["minimalist", "complex", "organic", "geometric"],
+      "default": "minimalist"
+    },
+    "colors": {
+      "type": "string[]",
+      "example": ["#00ffff", "#ff00ff", "#ffff00"],
+      "required": false
+    },
+    "speed": {
+      "type": "enum",
+      "values": ["slow", "medium", "fast"],
+      "default": "medium"
+    },
+    "interactivity": {
+      "type": "enum",
+      "values": ["mouse", "scroll", "none"],
+      "default": "none"
+    },
+    "renderer": {
+      "type": "enum",
+      "values": ["canvas2d", "webgl", "auto"],
+      "default": "auto"
+    }
+  },
+  "generation_pipeline": {
+    "step_1_analysis": {
+      "task": "Parse user description and extract key concepts",
+      "output": "Structured animation intent (motion type, element type, interaction)"
+    },
+    "step_2_research": {
+      "task": "Query existing animation registry for similar patterns",
+      "tool": "semantic_search on src/lib/animations/",
+      "output": "List of similar animations to use as reference"
+    },
+    "step_3_architecture": {
+      "task": "Design animation architecture (state, update logic, render approach)",
+      "considerations": [
+        "Complexity vs performance tradeoff",
+        "Canvas2D vs WebGL decision",
+        "Parameter configuration",
+        "Interactivity implementation"
+      ],
+      "output": "Animation blueprint (pseudo-code)"
+    },
+    "step_4_code_generation": {
+      "task": "Generate complete animation module",
+      "requirements": [
+        "Follow AnimationConfig interface",
+        "Include metadata (name, category, description, tags)",
+        "Define parameters with types and ranges",
+        "Implement init() function",
+        "Implement update(state, deltaTime) function",
+        "Implement render(ctx, state) function",
+        "Add inline comments for complex math"
+      ],
+      "output": "Complete TypeScript animation module"
+    },
+    "step_5_validation": {
+      "task": "Test generated animation",
+      "checks": [
+        "TypeScript compilation (no errors)",
+        "Animation runs without crashes",
+        "Achieves 60 FPS on desktop",
+        "Parameters work correctly",
+        "No console errors"
+      ],
+      "output": "Validation report"
+    },
+    "step_6_thumbnail": {
+      "task": "Generate static thumbnail image",
+      "method": "Capture animation frame at ~2 seconds",
+      "format": "WebP, 400x300px",
+      "output": "Thumbnail image file"
+    },
+    "step_7_registration": {
+      "task": "Add animation to registry",
+      "files": [
+        "Create animation file: src/lib/animations/{category}/{kebab-name}.ts",
+        "Update registry: src/lib/animations/registry.ts",
+        "Update metadata: src/lib/animations/metadata.json",
+        "Save thumbnail: public/thumbnails/{animation-id}.webp"
+      ],
+      "output": "Animation integrated into gallery"
+    }
+  },
+  "code_generation_template": {
+    "structure": "Follow existing animation patterns",
+    "reference_files": [
+      "src/lib/animations/particles/particle-burst.ts",
+      "src/lib/animations/waves/sine-wave.ts",
+      "src/lib/animations/geometric/polygon-morph.ts"
+    ],
+    "required_exports": "AnimationConfig object with metadata and lifecycle functions"
+  },
+  "quality_standards": {
+    "performance": "Must achieve 60 FPS on desktop, 30+ on mobile",
+    "code_quality": "TypeScript strict mode, no any types, clear variable names",
+    "parameters": "At least 3 adjustable parameters (color, speed, count/size)",
+    "documentation": "Clear description, inline comments for complex logic",
+    "error_handling": "Graceful degradation if parameters invalid",
+    "accessibility": "Not applicable for canvas content (purely visual)"
+  },
+  "example_generation_flow": {
+    "user_request": {
+      "description": "Create a DNA double helix made of glowing particles rotating in 3D space",
+      "category": "particles",
+      "style": "complex",
+      "colors": ["#00ffff", "#ff00ff"],
+      "speed": "medium",
+      "interactivity": "mouse"
+    },
+    "agent_analysis": {
+      "motion_type": "3D rotation, helical path",
+      "elements": "Particles (spheres)",
+      "pattern": "Double helix structure",
+      "interaction": "Mouse controls rotation speed"
+    },
+    "similar_animations": [
+      "src/lib/animations/particles/dna-helix.ts (already exists!)",
+      "src/lib/animations/particles/constellation.ts (particle connection pattern)",
+      "src/lib/animations/geometric/rotating-cubes.ts (3D rotation)"
+    ],
+    "generated_params": [
+      { "name": "particleCount", "type": "number", "min": 20, "max": 200, "default": 80 },
+      { "name": "rotationSpeed", "type": "number", "min": 0.1, "max": 5, "default": 1 },
+      { "name": "helixRadius", "type": "number", "min": 50, "max": 200, "default": 100 },
+      { "name": "color1", "type": "color", "default": "#00ffff" },
+      { "name": "color2", "type": "color", "default": "#ff00ff" }
+    ],
+    "validation_result": {
+      "compilation": "✅ Pass",
+      "runtime": "✅ Pass",
+      "fps": "✅ 60 FPS",
+      "parameters": "✅ All functional",
+      "errors": "✅ None"
+    },
+    "output_files": [
+      "src/lib/animations/particles/dna-helix-3d.ts",
+      "public/thumbnails/dna-helix-3d.webp"
+    ]
+  },
+  "integration_with_ui": {
+    "trigger": "User clicks 'Create Animation' button in gallery",
+    "modal": "AnimationCreator component with form",
+    "form_fields": [
+      "Description (textarea)",
+      "Category (select)",
+      "Style (select)",
+      "Colors (color pickers, optional)",
+      "Speed (slider)",
+      "Interactivity (select)"
+    ],
+    "process": [
+      "1. User fills form and clicks 'Generate'",
+      "2. Show loading state with progress messages",
+      "3. Agent generates animation code",
+      "4. Show preview in modal",
+      "5. User can 'Save to Gallery' or 'Regenerate'",
+      "6. On save, animation added to registry and visible in gallery"
+    ],
+    "ui_component": "src/components/creator/AnimationCreator.tsx"
+  },
+  "limitations": {
+    "complexity": "May struggle with very specific/complex requests",
+    "performance": "Generated animations may need manual optimization",
+    "creativity": "Limited by training data and existing patterns",
+    "validation": "User should review generated code before production use"
+  },
+  "future_enhancements": [
+    "Animation remixing (modify existing animations)",
+    "Style transfer (apply one animation's style to another)",
+    "Animation chaining (combine multiple effects)",
+    "Export to video (render animation to MP4/GIF)",
+    "Community voting and curation",
+    "Animation marketplace"
+  ],
+  "implementation_priority": "POST-MVP (Phase 5)",
+  "estimated_effort": "8-12 hours (agent definition + UI integration)",
+  "dependencies": [
+    "MVP gallery complete",
+    "All 24 base animations implemented",
+    "Animation registry system stable",
+    "Code export feature working"
+  ],
+  "response_format": {
+    "generation_start": "Acknowledge request, show parsed intent",
+    "progress_updates": "Report each pipeline step (analysis, research, generation, validation)",
+    "code_preview": "Show generated code snippet (first 20 lines)",
+    "completion": "Confirm animation created, show preview, provide file paths"
+  }
+}
