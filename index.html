@@ -4,7 +4,49 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>brain-rot</title>
+    <meta name="theme-color" content="#ffffff" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Brain-Rot - Canvas Animation Gallery</title>
+    <meta name="title" content="Brain-Rot - Canvas Animation Gallery" />
+    <meta name="description" content="Explore mesmerizing canvas animations. A collection of interactive particle systems, waves, geometric patterns, and glitch effects." />
+    <meta name="keywords" content="canvas animation, javascript, webgl, particles, waves, geometric patterns, glitch effects, creative coding, interactive art" />
+    <meta name="author" content="Brain-Rot" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://brain-rot.vercel.app/" />
+    <meta property="og:title" content="Brain-Rot - Canvas Animation Gallery" />
+    <meta property="og:description" content="Explore mesmerizing canvas animations. A collection of interactive particle systems, waves, geometric patterns, and glitch effects." />
+    <meta property="og:image" content="https://brain-rot.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Brain-Rot" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://brain-rot.vercel.app/" />
+    <meta name="twitter:title" content="Brain-Rot - Canvas Animation Gallery" />
+    <meta name="twitter:description" content="Explore mesmerizing canvas animations. A collection of interactive particle systems, waves, geometric patterns, and glitch effects." />
+    <meta name="twitter:image" content="https://brain-rot.vercel.app/og-image.png" />
+    
+    <!-- Prevent flash of unstyled content (FOUC) for theme -->
+    <script>
+      (() => {
+        const theme = localStorage.getItem('theme') || 'system'
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        const effectiveTheme = theme === 'system' ? systemTheme : theme
+        
+        document.documentElement.classList.add(effectiveTheme)
+        
+        // Update meta theme-color
+        const metaTheme = document.querySelector('meta[name="theme-color"]')
+        if (metaTheme) {
+          metaTheme.setAttribute('content', effectiveTheme === 'dark' ? '#0a0a0a' : '#ffffff')
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -108,6 +108,7 @@ export class CanvasEngine {
       this.ctx = canvas.getContext('2d', {
         alpha: false, // Disable alpha for better performance
         desynchronized: true, // Reduce latency
+        willReadFrequently: true, // Optimize for frequent getImageData calls (glitch effects)
       })
     } else {
       this.ctx =

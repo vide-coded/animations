@@ -37,9 +37,9 @@ export function AnimationCard({ animation, isHoverPlayEnabled = true }: Animatio
   const engineRef = useRef<CanvasEngine | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const hoverTimeoutRef = useRef<number | null>(null)
 
-  const autoPlayOnHover = galleryStore.useState((state) => state.autoPlayOnHover)
+  const autoPlayOnHover = galleryStore.state.autoPlayOnHover
 
   // Cleanup on unmount
   useEffect(() => {
@@ -78,22 +78,33 @@ export function AnimationCard({ animation, isHoverPlayEnabled = true }: Animatio
 
     try {
       // Load animation from registry
-      const animationModule = await animationRegistry.getAnimation(animation.id)
-      if (!animationModule || !canvasRef.current) {
+      const animationInstance = await animationRegistry.getById(animation.id)
+      if (!animationInstance || !canvasRef.current) {
+        console.warn(`Animation ${animation.id} not found or canvas not ready`)
         hoverPlayManager.unregister(animation.id)
+        setIsPlaying(false)
         return
+      }
+
+      // Check canvas dimensions
+      const rect = canvasRef.current.getBoundingClientRect()
+      if (rect.width === 0 || rect.height === 0) {
+        console.warn(`Canvas has zero dimensions for ${animation.id}`)
       }
 
       // Initialize canvas engine
       const engine = new CanvasEngine(canvasRef.current)
       engineRef.current = engine
 
-      // Initialize and start animation
-      await engine.initialize(animationModule.animation, animationModule.defaultParams)
-      engine.start()
+      // Load and start animation
+      engine.loadAnimation(animationInstance)
+      engine.play()
+      
+      console.log(`Animation ${animation.id} started playing`)
     } catch (error) {
       console.error(`Failed to start hover animation for ${animation.id}:`, error)
       hoverPlayManager.unregister(animation.id)
+      setIsPlaying(false)
     } finally {
       setIsLoading(false)
     }
@@ -138,26 +149,24 @@ export function AnimationCard({ animation, isHoverPlayEnabled = true }: Animatio
       className="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10"
     >
       {/* Thumbnail with Canvas Overlay */}
-      <div className="relative aspect-video w-full overflow-hidden bg-gradient-to-br from-background to-muted">
-        {/* Canvas for hover animation */}
+      <div className="relative aspect-video w-full overflow-hidden bg-gradient-to-br from-muted/30 to-muted/50">
+        {/* Canvas for animation - always visible with proper sizing */}
         <canvas
           ref={canvasRef}
-          className={cn(
-            'absolute inset-0 h-full w-full object-cover transition-opacity duration-300',
-            isPlaying ? 'opacity-100' : 'opacity-0'
-          )}
+          className="absolute inset-0 w-full h-full"
+          style={{ display: 'block' }}
           tabIndex={-1}
           aria-hidden="true"
         />
 
-        {/* Static placeholder */}
+        {/* Static placeholder with gradient (visible when not loaded or playing) */}
         <div
           className={cn(
-            'absolute inset-0 flex items-center justify-center transition-opacity duration-300',
-            isPlaying ? 'opacity-0' : 'opacity-100'
+            'absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10 transition-opacity duration-300',
+            isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
           )}
         >
-          <div className="text-4xl font-bold text-muted-foreground/20">
+          <div className="text-6xl font-bold text-muted-foreground/10">
             {animation.name.charAt(0)}
           </div>
         </div>

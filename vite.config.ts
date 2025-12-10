@@ -26,7 +26,7 @@ export default defineConfig({
             }
             return 'vendor'
           }
-          
+
           // Animation category chunks
           if (id.includes('src/lib/animations/')) {
             if (id.includes('particles/')) return 'animations-particles'

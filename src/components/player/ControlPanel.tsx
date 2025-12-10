@@ -25,7 +25,9 @@ export function ControlPanel({
   className = '',
 }: ControlPanelProps) {
   return (
-    <div className={`flex items-center justify-between gap-6 ${className}`}>
+    <div
+      className={`flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 ${className}`}
+    >
       {/* Left Section - Playback Controls */}
       <div className="flex items-center gap-3">
         {/* Play/Pause Button */}

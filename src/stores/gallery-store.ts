@@ -5,7 +5,7 @@ export interface GalleryState {
   // Filters
   selectedCategory: AnimationCategory | 'all'
   searchQuery: string
-  sortBy: 'name' | 'difficulty' | 'date'
+  sortBy: 'name' | 'category' | 'difficulty' | 'createdAt' | 'updatedAt'
   sortOrder: 'asc' | 'desc'
 
   // Favorites & History

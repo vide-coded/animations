@@ -1,9 +1,13 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-store'
 import { ArrowLeft, Clock, Heart, Sparkles } from 'lucide-react'
+import { useEffect } from 'react'
 import { AnimationCard } from '@/components/gallery/AnimationCard'
+import { EmptyState } from '@/components/shared/EmptyState'
+import { ThemeToggle } from '@/components/shared/ThemeToggle'
 import { getAnimationsByIds } from '@/lib/animations/registry'
 import { cn } from '@/lib/utils/cn'
+import { getFavoritesSEO, updateMetaTags } from '@/lib/utils/seo'
 import { gallerySelectors, galleryStore } from '@/stores/gallery-store'
 import type { AnimationMetadata } from '@/types/animation'
 
@@ -19,6 +23,11 @@ function FavoritesPage() {
   const recentAnimations = getAnimationsByIds(
     recentlyViewed.slice(0, 6) // Limit to 6 most recent
   )
+
+  // Update SEO meta tags
+  useEffect(() => {
+    updateMetaTags(getFavoritesSEO(favorites.length))
+  }, [favorites.length])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
@@ -39,6 +48,7 @@ function FavoritesPage() {
               <ArrowLeft size={16} />
               Back to Gallery
             </Link>
+            <ThemeToggle />
           </div>
         </div>
       </header>
@@ -61,28 +71,25 @@ function FavoritesPage() {
           </div>
 
           {favorites.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 px-4">
-              <div className="p-4 rounded-full bg-muted/50 mb-4">
-                <Heart className="w-12 h-12 text-muted-foreground" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">No favorites yet</h3>
-              <p className="text-muted-foreground text-center max-w-md mb-6">
-                Start exploring animations and click the heart icon to save your favorites for easy
-                access.
-              </p>
-              <Link
-                to="/"
-                className={cn(
-                  'inline-flex items-center gap-2 px-6 py-3 rounded-lg',
-                  'bg-primary text-primary-foreground font-medium',
-                  'hover:bg-primary/90 transition-colors duration-200',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                )}
-              >
-                <Sparkles size={18} />
-                Explore Gallery
-              </Link>
-            </div>
+            <EmptyState
+              icon={Heart}
+              title="No favorites yet"
+              description="Start exploring animations and click the heart icon to save your favorites for easy access."
+              action={
+                <Link
+                  to="/"
+                  className={cn(
+                    'inline-flex items-center gap-2 px-6 py-3 rounded-lg',
+                    'bg-primary text-primary-foreground font-medium',
+                    'hover:bg-primary/90 transition-colors duration-200',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+                  )}
+                >
+                  <Sparkles size={18} />
+                  Explore Gallery
+                </Link>
+              }
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {favoriteAnimations.map((animation: AnimationMetadata) => (
